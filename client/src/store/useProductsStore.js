@@ -1,5 +1,5 @@
 import { create } from "zustand";
-
+const API_URL = process.env.API_URL
 export const useProductsStore = create((set) => ({
   products: [],
   setProducts: (products) => set({ products }),
@@ -12,7 +12,7 @@ export const useProductsStore = create((set) => ({
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/products${id ? "/" + id : ""}`,
+      const response = await fetch(`${API_URL}${id ? "/" + id : ""}`,
         {
           method: `${id ? "PUT" : "POST"}`,
           headers: { "Content-Type": "application/json" },
@@ -35,14 +35,14 @@ export const useProductsStore = create((set) => ({
   },
 
   getProduct: async (searchProduct) => {
-    const res = await fetch("http://localhost:5000/api/products/");
+    const res = await fetch(API_URL);
     const data = await res.json();
     set({ products: data.data, searchProduct });
   },
 
   getProductById: async (id) =>{
     const response = await fetch(
-      `http://localhost:5000/api/products/${id}`
+      `${API_URL}/${id}`
     );
     if (!response.ok) {
       const message = `An error has occurred: ${response.statusText}`;
@@ -58,7 +58,7 @@ export const useProductsStore = create((set) => ({
 },
   
   deleteProduct: async (id) => {
-    const res = await fetch(`http://localhost:5000/api/products/${id}`, {
+    const res = await fetch(`${API_URL}/${id}`, {
       method: "DELETE",
     });
     const data = await res.json();
